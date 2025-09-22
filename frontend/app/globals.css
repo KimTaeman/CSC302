@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 207 60% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 73% 50%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 207 60% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 207 60% 40%;
+
+    /* Theme colors based on uploaded palette */
+    --rank-1: 51 100% 50%; /* Gold */
+    --rank-2: 0 0% 75%; /* Silver */
+    --rank-3: 30 100% 50%; /* Bronze */
+    --rank-default: 0 0% 57%; /* Gray */
+
+    --team-orange: 25 95% 53%;
+    --team-blue: 207 60% 40%;
+    --team-yellow: 48 96% 53%;
+    --team-green: 142 76% 36%;
+
+    --score-text: 0 0% 0%;
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(207 60% 40%),
+      hsl(200 73% 50%)
+    );
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 40% 98%));
+    --shadow-card: 0 4px 6px -1px hsl(0 0% 57% / 0.1),
+      0 2px 4px -1px hsl(0 0% 57% / 0.06);
+    --shadow-rank: 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 220 25% 6%;
+    --foreground: 210 40% 95%;
+
+    --card: 220 20% 8%;
+    --card-foreground: 210 40% 95%;
+
+    --popover: 220 20% 8%;
+    --popover-foreground: 210 40% 95%;
+
+    --primary: 220 90% 65%;
+    --primary-foreground: 220 25% 10%;
+
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 210 40% 95%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 65%;
+
+    --accent: 160 75% 55%;
+    --accent-foreground: 220 25% 10%;
+
+    --destructive: 0 75% 65%;
+    --destructive-foreground: 220 25% 10%;
+
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 220 90% 65%;
+
+    /* Dark mode scoreboard colors */
+    --rank-1: 46 100% 65%;
+    --rank-2: 220 90% 65%;
+    --rank-3: 280 100% 75%;
+    --rank-default: 160 75% 55%;
+
+    --team-orange: 25 100% 65%;
+    --team-blue: 220 90% 65%;
+    --team-yellow: 46 100% 65%;
+    --team-green: 160 75% 55%;
+
+    --score-text: 220 90% 65%;
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(220 20% 8%) 0%,
+      hsl(220 15% 12%) 100%
+    );
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-rank: 0 2px 10px hsl(var(--accent) / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-code;
+  }
+
+  /* Background image styles */
+  .bg-kmutt {
+    background-image: url('https://www.sit.kmutt.ac.th/wp-content/uploads/2024/01/IT-18.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .bg-overlay {
+    position: relative;
+  }
+
+  .bg-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 70, 153, 0.4);
+    backdrop-filter: blur(10px);
+    z-index: 0;
+  }
+
+  .content-overlay {
+    position: relative;
+    z-index: 1;
+  }
+}
+.rank-1 {
+  background-color: hsl(var(--rank-1));
+}
+.rank-2 {
+  background-color: hsl(var(--primary));
+}
+.rank-3 {
+  background-color: hsl(var(--rank-3));
+}
+.default-rank {
+  background-color: hsl(var(--secondary));
+  color: #121212;
+}
