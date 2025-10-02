@@ -141,7 +141,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(15, 70, 153, 0.4);
+    background-color: rgba(11, 39, 82, 0.642);
     backdrop-filter: blur(10px);
     z-index: 0;
   }

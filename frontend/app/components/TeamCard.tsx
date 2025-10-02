@@ -137,16 +137,17 @@ export const TeamCard = ({
           )}
         </div>
 
-        {/* Members section */}
+        {/* Students section */}
         {(isTopThree || isExpanded) && (
           <div className='mb-4'>
             <div className='grid grid-cols-2 gap-2'>
-              {team.members.map((member, index) => (
+              {team.students.map((student) => (
                 <div
-                  key={index}
+                  key={student.id}
                   className='text-sm text-muted-foreground font-code bg-muted/50 px-3 py-1 rounded'
+                  title={`Student ID: ${student.studentId}`}
                 >
-                  {member}
+                  {student.name}
                 </div>
               ))}
             </div>
