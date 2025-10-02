@@ -1,17 +1,21 @@
-'use client';
-
-import { useParams, useRouter } from 'next/navigation';
-import { teams, Team } from '../../data/teams';
+import { getTeams, Team } from '../../lib/strapi-server';
 import { Card } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
 import { ArrowLeft, Users, Trophy, Target } from 'lucide-react';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 
-const TeamDetailsPage = () => {
-  const params = useParams();
-  const router = useRouter();
-  const teamCode = params.teamId as string;
+interface TeamDetailsPageProps {
+  params: {
+    teamId: string;
+  };
+}
+
+const TeamDetailsPage = async ({ params }: TeamDetailsPageProps) => {
+  const teamCode = params.teamId;
+  
+  // Fetch all teams to find the one we want and calculate rankings
+  const teams = await getTeams();
 
   // Find team by code (e.g., "csc302-01")
   const team = teams.find(
@@ -21,10 +25,6 @@ const TeamDetailsPage = () => {
   if (!team) {
     notFound();
   }
-
-  const handleBackClick = () => {
-    router.push('/');
-  };
 
   const getRankColor = (team: Team) => {
     const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
@@ -46,14 +46,13 @@ const TeamDetailsPage = () => {
       <div className='container mx-auto px-10 py-8 content-overlay'>
         {/* Header with back button */}
         <div className='mb-8'>
-          <Button
-            variant='outline'
-            onClick={handleBackClick}
-            className='mb-4 hover:bg-accent'
+          <Link
+            href="/"
+            className='inline-flex items-center px-4 py-2 mb-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
           >
             <ArrowLeft className='w-4 h-4 mr-2' />
             Back to Scoreboard
-          </Button>
+          </Link>
 
           <div className='flex items-center gap-4 mb-2'>
             <h1 className='text-4xl font-bold text-foreground font-mono'>

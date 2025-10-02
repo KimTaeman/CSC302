@@ -1,0 +1,7 @@
+ignoredBuiltDependencies:
+  - '@swc/core'
+  - better-sqlite3
+  - core-js-pure
+  - esbuild
+  - libxmljs
+  - sharp

@@ -1,4 +1,4 @@
-import { Team } from '../data/teams';
+import { Team } from '../lib/strapi-server';
 import { Card } from './ui/card';
 import { Trophy, Users, Target, TrendingUp } from 'lucide-react';
 

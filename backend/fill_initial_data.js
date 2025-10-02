@@ -1,21 +1,11 @@
-// Student interface to match Strapi Student content type
-export interface Student {
-  id: string;
-  name: string;
-  studentId: string;
-}
+// One-time script to import teams and students data into Strapi CMS
+// Run this once with: node scripts/import-data.js
 
-// Team interface to match Strapi Team content type with Student relationship
-export interface Team {
-  id: string;
-  name: string;
-  code: string;
-  topic: string;
-  score: number;
-  students: Student[]; // Changed from members: string[] to students: Student[]
-}
+const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
-export const teams: Team[] = [
+// Hardcoded data from your teams.ts file
+const teamsData = [
   {
     id: '1',
     name: 'CSC302-01',
@@ -103,8 +93,7 @@ export const teams: Team[] = [
     id: '7',
     name: 'CSC302-07',
     code: 'CSC302-07',
-    topic:
-      'How AI Is Reshaping Business Across Key Sectors: Travel, Healthcare and Finance',
+    topic: 'How AI Is Reshaping Business Across Key Sectors: Travel, Healthcare and Finance',
     score: 0,
     students: [
       { id: '30', name: 'MR.ISMAIL UMAR AJINGI', studentId: 'STU030' },
@@ -123,11 +112,7 @@ export const teams: Team[] = [
     students: [
       { id: '35', name: 'MR.JIRATANUTH RAHMAN', studentId: 'STU035' },
       { id: '36', name: 'MR.THIRAWAT KONGNIL', studentId: 'STU036' },
-      {
-        id: '37',
-        name: 'MR.PRAPANGKORN THANGSATHITYANGKUL',
-        studentId: 'STU037',
-      },
+      { id: '37', name: 'MR.PRAPANGKORN THANGSATHITYANGKUL', studentId: 'STU037' },
       { id: '38', name: 'MR.PUNYAPAT JAISUK', studentId: 'STU038' },
       { id: '39', name: 'MR.SUPAKRIT DUANGSRI', studentId: 'STU039' },
     ],
@@ -150,8 +135,7 @@ export const teams: Team[] = [
     id: '10',
     name: 'CSC302-10',
     code: 'CSC302-10',
-    topic:
-      'Gamifying Reality: How Technology Turns Everyday Life into a Digital Quest',
+    topic: 'Gamifying Reality: How Technology Turns Everyday Life into a Digital Quest',
     score: 0,
     students: [
       { id: '45', name: 'MR.NITHIT LERTCHAROENSOMBAT', studentId: 'STU045' },
@@ -235,8 +219,7 @@ export const teams: Team[] = [
     id: '16',
     name: 'CSC302-16',
     code: 'CSC302-16',
-    topic:
-      'Non-programming opportunities in Computer Science: Find out how you can shine in CS without being a programming guru',
+    topic: 'Non-programming opportunities in Computer Science: Find out how you can shine in CS without being a programming guru',
     score: 0,
     students: [
       { id: '75', name: 'MR.MIN KHANT WUNNA', studentId: 'STU075' },
@@ -260,9 +243,7 @@ export const teams: Team[] = [
     code: 'CSC302-18',
     topic: 'Beyond the Pen: How Digital Signatures Secure Our Digital World',
     score: 0,
-    students: [
-      { id: '81', name: 'MR.BADEESORN SITTIKONG', studentId: 'STU081' },
-    ],
+    students: [{ id: '81', name: 'MR.BADEESORN SITTIKONG', studentId: 'STU081' }],
   },
   {
     id: '19',
@@ -276,8 +257,7 @@ export const teams: Team[] = [
     id: '20',
     name: 'CSC302-20',
     code: 'CSC302-20',
-    topic:
-      'Everyday AI and Its Vulnerabilities: From Practical Applications to Adversarial Attacks',
+    topic: 'Everyday AI and Its Vulnerabilities: From Practical Applications to Adversarial Attacks',
     score: 0,
     students: [
       { id: '83', name: 'MR.KAUNG MYAT KYAW', studentId: 'STU083' },
@@ -290,8 +270,99 @@ export const teams: Team[] = [
     code: 'CSC302-21',
     topic: 'Why Time Series Databases? Exploring InfluxDB',
     score: 0,
-    students: [
-      { id: '85', name: 'MS.NATTAWADEE WUTTIVORADIT', studentId: 'STU085' },
-    ],
+    students: [{ id: '85', name: 'MS.NATTAWADEE WUTTIVORADIT', studentId: 'STU085' }],
   },
 ];
+
+// Helper function to make POST requests to Strapi
+async function createStrapiRecord(endpoint, data) {
+  const url = `${STRAPI_URL}/api/${endpoint}`;
+  
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  if (STRAPI_API_TOKEN) {
+    headers.Authorization = `Bearer ${STRAPI_API_TOKEN}`;
+  }
+
+  console.log(url);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ data }),
+  });
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error(`Failed to create ${endpoint}: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+// Main import function
+async function importData() {
+  console.log('🚀 Starting data import to Strapi...');
+  
+  try {
+    // Step 1: Create all students first
+    console.log('📚 Creating students...');
+    const studentIdMap = new Map(); // Map old IDs to new Strapi IDs
+    
+    for (const team of teamsData) {
+      for (const student of team.students) {
+        if (!studentIdMap.has(student.id)) {
+          try {
+            const result = await createStrapiRecord('students', {
+              name: student.name,
+              studentId: student.studentId,
+            });
+            studentIdMap.set(student.id, result.data.id);
+            console.log(`✅ Created student: ${student.name} (ID: ${result.data.id})`);
+          } catch (error) {
+            console.error(`❌ Failed to create student ${student.name}:`, error.message);
+          }
+        }
+      }
+    }
+
+    console.log(`\n📊 Created ${studentIdMap.size} students`);
+
+    // Step 2: Create teams with student relationships
+    console.log('\n🏆 Creating teams...');
+    let teamsCreated = 0;
+
+    for (const team of teamsData) {
+      try {
+        // Get the Strapi IDs for this team's students
+        const studentIds = team.students.map(student => studentIdMap.get(student.id));
+        
+        const result = await createStrapiRecord('teams', {
+          name: team.name,
+          code: team.code,
+          topic: team.topic,
+          score: team.score,
+          students: studentIds, // Array of student IDs for relationship
+        });
+
+        teamsCreated++;
+        console.log(`✅ Created team: ${team.name} (ID: ${result.data.id})`);
+      } catch (error) {
+        console.error(`❌ Failed to create team ${team.name}:`, error.message);
+      }
+    }
+
+    console.log(`\n🎉 Import completed!`);
+    console.log(`📊 Summary:`);
+    console.log(`   - Students created: ${studentIdMap.size}`);
+    console.log(`   - Teams created: ${teamsCreated}`);
+    console.log(`   - Total records: ${studentIdMap.size + teamsCreated}`);
+
+  } catch (error) {
+    console.error('💥 Import failed:', error);
+  }
+}
+
+// Run the import
+importData();

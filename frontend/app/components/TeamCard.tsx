@@ -2,27 +2,19 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Team } from '../data/teams';
+import { Team } from '../lib/strapi-server';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Badge } from './ui/badge';
 import {
-  Edit3,
-  Check,
-  X,
   Trophy,
   Medal,
   Award,
-  ChevronDown,
-  ChevronUp,
   ExternalLink,
 } from 'lucide-react';
 
 interface TeamCardProps {
   team: Team;
   rank: number;
-  onScoreUpdate: (id: string, newScore: number) => void;
   isTopThree?: boolean;
 }
 
@@ -60,24 +52,10 @@ const getRankIcon = (rank: number) => {
 export const TeamCard = ({
   team,
   rank,
-  onScoreUpdate,
   isTopThree = false,
 }: TeamCardProps) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editScore, setEditScore] = useState(team.score.toString());
-  const [isExpanded, setIsExpanded] = useState(isTopThree);
+  const [isExpanded] = useState(isTopThree);
   const router = useRouter();
-
-  const handleSave = () => {
-    const newScore = parseFloat(editScore) || 0;
-    onScoreUpdate(team.id, newScore);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setEditScore(team.score.toString());
-    setIsEditing(false);
-  };
 
   const handleViewDetails = () => {
     router.push(`/team-details/${team.code.toLowerCase()}`);

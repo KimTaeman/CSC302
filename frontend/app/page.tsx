@@ -1,48 +1,19 @@
-'use client';
-
 import { TeamCard } from './components/TeamCard';
 import { ScoreboardHeader } from './components/ScoreboardHeader';
 import { StatsPanel } from './components/StatsPanel';
-import { useTeams } from './hooks/useTeams';
+import { getTeams } from './lib/strapi-server';
 
-export default function Home() {
-  const { teams, loading, error, updateTeamScore } = useTeams();
-
-  const handleScoreUpdate = async (id: string, newScore: number) => {
-    await updateTeamScore(id, newScore);
-  };
+export default async function Home() {
+  // Fetch teams data on the server side
+  const teams = await getTeams();
 
   // Sort teams by score (descending) and assign ranks
   const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
-
-  if (loading) {
-    return (
-      <div className='min-h-screen bg-kmutt bg-overlay'>
-        <div className='container mx-auto px-10 py-8 content-overlay'>
-          <ScoreboardHeader />
-          <div className='flex items-center justify-center py-20'>
-            <div className='text-center'>
-              <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary-foreground mx-auto mb-4'></div>
-              <p className='text-primary-foreground text-lg'>
-                Loading teams...
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className='min-h-screen bg-kmutt bg-overlay'>
       <div className='container mx-auto px-10 py-8 content-overlay'>
         <ScoreboardHeader />
-
-        {error && (
-          <div className='mb-6 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg'>
-            <p className='font-medium'>⚠️ {error}</p>
-          </div>
-        )}
 
         <StatsPanel teams={teams} />
 
@@ -57,7 +28,6 @@ export default function Home() {
                 key={team.id}
                 team={team}
                 rank={index + 1}
-                onScoreUpdate={handleScoreUpdate}
                 isTopThree={true}
               />
             ))}
@@ -76,7 +46,6 @@ export default function Home() {
                   key={team.id}
                   team={team}
                   rank={index + 4}
-                  onScoreUpdate={handleScoreUpdate}
                   isTopThree={false}
                 />
               ))}
