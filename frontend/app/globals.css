@@ -60,56 +60,6 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
   }
-
-  .dark {
-    --background: 220 25% 6%;
-    --foreground: 210 40% 95%;
-
-    --card: 220 20% 8%;
-    --card-foreground: 210 40% 95%;
-
-    --popover: 220 20% 8%;
-    --popover-foreground: 210 40% 95%;
-
-    --primary: 220 90% 65%;
-    --primary-foreground: 220 25% 10%;
-
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 210 40% 95%;
-
-    --muted: 220 15% 15%;
-    --muted-foreground: 220 10% 65%;
-
-    --accent: 160 75% 55%;
-    --accent-foreground: 220 25% 10%;
-
-    --destructive: 0 75% 65%;
-    --destructive-foreground: 220 25% 10%;
-
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 220 90% 65%;
-
-    /* Dark mode scoreboard colors */
-    --rank-1: 46 100% 65%;
-    --rank-2: 220 90% 65%;
-    --rank-3: 280 100% 75%;
-    --rank-default: 160 75% 55%;
-
-    --team-orange: 25 100% 65%;
-    --team-blue: 220 90% 65%;
-    --team-yellow: 46 100% 65%;
-    --team-green: 160 75% 55%;
-
-    --score-text: 220 90% 65%;
-    --gradient-card: linear-gradient(
-      145deg,
-      hsl(220 20% 8%) 0%,
-      hsl(220 15% 12%) 100%
-    );
-    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
-    --shadow-rank: 0 2px 10px hsl(var(--accent) / 0.4);
-  }
 }
 
 @layer base {
@@ -159,8 +109,4 @@ All colors MUST be HSL.
 }
 .rank-3 {
   background-color: hsl(var(--rank-3));
-}
-.default-rank {
-  background-color: hsl(var(--secondary));
-  color: #121212;
 }

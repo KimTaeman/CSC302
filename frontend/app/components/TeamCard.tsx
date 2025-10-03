@@ -53,7 +53,6 @@ export const TeamCard = ({ team, rank, isTopThree = false }: TeamCardProps) => {
   };
 
   const borderColor = getBorderColor(parseInt(team.id) - 1);
-  console.log(team.id, borderColor);
   const rankColor = getRankColor(rank);
 
   return (

@@ -1,7 +1,8 @@
 // Simple server-side Strapi data fetching with hardcoded URLs
 // This file only handles reading data from Strapi CMS
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // Student interface to match Strapi Student content type
@@ -54,7 +55,7 @@ function convertStrapiTeam(strapiTeam: StrapiTeamResponse): Team {
     code: strapiTeam.code,
     topic: strapiTeam.topic,
     score: strapiTeam.score || 0,
-    students: strapiTeam.students 
+    students: strapiTeam.students
       ? strapiTeam.students.map(convertStrapiStudent)
       : [],
   };
@@ -64,7 +65,7 @@ function convertStrapiTeam(strapiTeam: StrapiTeamResponse): Team {
 export async function getTeams(): Promise<Team[]> {
   try {
     const url = `${STRAPI_URL}/api/teams?populate[students][fields][0]=name&populate[students][fields][1]=studentId&sort[0]=score%3Adesc&pagination[pageSize]=100`;
-    
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
@@ -80,13 +81,14 @@ export async function getTeams(): Promise<Team[]> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch teams: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();
     return data.data.map(convertStrapiTeam);
   } catch (error) {
-    console.error('Error fetching teams from Strapi:', error);
     return [];
   }
 }
@@ -95,7 +97,7 @@ export async function getTeams(): Promise<Team[]> {
 export async function getTeam(id: string): Promise<Team | null> {
   try {
     const url = `${STRAPI_URL}/api/teams/${id}?populate[students][fields][0]=name&populate[students][fields][1]=studentId`;
-    
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
@@ -111,13 +113,14 @@ export async function getTeam(id: string): Promise<Team | null> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch team ${id}: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch team ${id}: ${response.status} ${response.statusText}`
+      );
     }
-    
+
     const data = await response.json();
     return convertStrapiTeam(data.data);
   } catch (error) {
-    console.error(`Error fetching team ${id} from Strapi:`, error);
     return null;
   }
 }
@@ -126,7 +129,7 @@ export async function getTeam(id: string): Promise<Team | null> {
 export async function getStudents(): Promise<Student[]> {
   try {
     const url = `${STRAPI_URL}/api/students?sort[0]=name%3Aasc&pagination[pageSize]=200`;
-    
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
@@ -142,13 +145,14 @@ export async function getStudents(): Promise<Student[]> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch students: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch students: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();
     return data.data.map(convertStrapiStudent);
   } catch (error) {
-    console.error('Error fetching students from Strapi:', error);
     return [];
   }
 }
