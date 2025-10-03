@@ -53,15 +53,15 @@ export const StatsPanel = ({ teams }: StatsPanelProps) => {
           key={index}
           className='p-4 bg-gradient-card shadow-card transition-all duration-300'
         >
-          <div className='flex items-center space-x-3'>
+          <div className='flex flex-col md:flex-row items-center md:space-x-3'>
             <div className={`p-2 rounded-lg bg-${stat.color}/10`}>
               <stat.icon className={`h-5 w-5 text-${stat.color}`} />
             </div>
-            <div>
-              <p className='text-sm text-muted-foreground font-code'>
+            <div className='text-center md:text-left'>
+              <p className='text-xs sm:text-sm text-muted-foreground font-code'>
                 {stat.label}
               </p>
-              <p className='text-2xl font-bold text-foreground font-mono'>
+              <p className='text-lg sm:text-xl md:text-2xl font-bold text-foreground font-mono'>
                 {stat.value}
               </p>
             </div>

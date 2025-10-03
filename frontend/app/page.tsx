@@ -19,7 +19,7 @@ export default async function Home() {
 
         {/* Top 3 teams - full width */}
         <div className='mb-8'>
-          <h2 className='text-2xl font-bold text-primary-foreground mb-6 font-mono'>
+          <h2 className='text-xl sm:text-2xl md:text-2xl font-bold text-primary-foreground mb-6 font-mono'>
             Top 3 Teams
           </h2>
           <div className='space-y-4'>
@@ -37,7 +37,7 @@ export default async function Home() {
         {/* Other teams - 3 column grid */}
         {sortedTeams.length > 3 && (
           <div>
-            <h2 className='text-2xl font-bold text-primary-foreground mb-6 font-mono'>
+            <h2 className='text-xl sm:text-2xl md:text-2xl font-bold text-primary-foreground mb-6 font-mono'>
               Runners up
             </h2>
             <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
