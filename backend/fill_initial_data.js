@@ -2,8 +2,7 @@
 // Run this once with: node fill_initial_data.js
 
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
-const STRAPI_API_TOKEN =
-  'bda54db8640e9a24eb1933481446ac55a7fd9e2743e078b9ac65f282690f78c3eb5dcf3cc6e3142129b686eb5cd0c87acc10d3d0ed27e0b1f9647122fb0c8069a9bf1b12dc96c9a0416a75cebe9f1d172dbe28c89f2b7907da052506d3ec556622e1f81a5abdda0edfd676dddd671c70a623cd67df818d563687497543ba428a';
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // Validate that API token is provided
 if (!STRAPI_API_TOKEN) {
