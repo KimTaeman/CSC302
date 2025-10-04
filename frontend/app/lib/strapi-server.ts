@@ -22,15 +22,17 @@ export interface Team {
   students: Student[];
 }
 
-// Strapi API response types
+// Strapi API response types (v5 format)
 interface StrapiStudentResponse {
   id: number;
+  documentId?: string;
   name: string;
   studentId: string;
 }
 
 interface StrapiTeamResponse {
   id: number;
+  documentId?: string;
   name: string;
   code: string;
   topic: string;
@@ -41,7 +43,7 @@ interface StrapiTeamResponse {
 // Convert Strapi student data to our Student interface
 function convertStrapiStudent(strapiStudent: StrapiStudentResponse): Student {
   return {
-    id: strapiStudent.id.toString(),
+    id: (strapiStudent.documentId || strapiStudent.id).toString(),
     name: strapiStudent.name,
     studentId: strapiStudent.studentId,
   };
@@ -50,7 +52,7 @@ function convertStrapiStudent(strapiStudent: StrapiStudentResponse): Student {
 // Convert Strapi team data to our Team interface
 function convertStrapiTeam(strapiTeam: StrapiTeamResponse): Team {
   return {
-    id: strapiTeam.id.toString(),
+    id: (strapiTeam.documentId || strapiTeam.id).toString(),
     name: strapiTeam.name,
     code: strapiTeam.code,
     topic: strapiTeam.topic,
@@ -81,14 +83,21 @@ export async function getTeams(): Promise<Team[]> {
     });
 
     if (!response.ok) {
+      console.error(
+        `Failed to fetch teams: ${response.status} ${response.statusText}`
+      );
       throw new Error(
         `Failed to fetch teams: ${response.status} ${response.statusText}`
       );
     }
 
     const data = await response.json();
+    console.log('Strapi API response:', JSON.stringify(data, null, 2));
     return data.data.map(convertStrapiTeam);
   } catch (error) {
+    console.error('Error fetching teams:', error);
+    console.log('STRAPI_URL:', STRAPI_URL);
+    console.log('Has STRAPI_API_TOKEN:', !!STRAPI_API_TOKEN);
     return [];
   }
 }
