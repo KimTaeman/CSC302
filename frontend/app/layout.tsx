@@ -34,6 +34,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <head>
+        <link
+          rel='icon'
+          href='https://www.sit.kmutt.ac.th/wp-content/uploads/2023/07/cropped-SITLogo512-32x32.png'
+          sizes='32x32'
+        ></link>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} ${firaCode.variable} antialiased font-code`}
       >
