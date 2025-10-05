@@ -7,8 +7,15 @@ export default async function Home() {
   // Fetch teams data on the server side
   const teams = await getTeams();
 
-  // Sort teams by score (descending) and assign ranks
-  const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
+  // Sort teams by score (descending), then by team code (ascending) for ties
+  const sortedTeams = [...teams].sort((a, b) => {
+    // First, sort by score (descending - higher scores first)
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    // If scores are equal, sort by team code (ascending - CSC302-01 before CSC302-02)
+    return a.code.localeCompare(b.code);
+  });
 
   // Create a map to get original index for consistent colors
   const teamIndexMap = new Map();
