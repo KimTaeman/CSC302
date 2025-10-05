@@ -10,6 +10,12 @@ export default async function Home() {
   // Sort teams by score (descending) and assign ranks
   const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
 
+  // Create a map to get original index for consistent colors
+  const teamIndexMap = new Map();
+  teams.forEach((team, index) => {
+    teamIndexMap.set(team.id, index);
+  });
+
   return (
     <div className='min-h-screen bg-kmutt bg-overlay'>
       <div className='container mx-auto px-10 py-8 content-overlay'>
@@ -29,6 +35,7 @@ export default async function Home() {
                 team={team}
                 rank={index + 1}
                 isTopThree={true}
+                index={teamIndexMap.get(team.id) || 0}
               />
             ))}
           </div>
@@ -47,6 +54,7 @@ export default async function Home() {
                   team={team}
                   rank={index + 4}
                   isTopThree={false}
+                  index={teamIndexMap.get(team.id) || 0}
                 />
               ))}
             </div>

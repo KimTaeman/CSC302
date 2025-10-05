@@ -11,10 +11,16 @@ interface TeamCardProps {
   team: Team;
   rank: number;
   isTopThree?: boolean;
+  index?: number;
 }
 
 const getBorderColor = (index: number): string => {
-  const colors = ['team-orange', 'team-blue', 'team-yellow', 'team-green'];
+  const colors = [
+    'border-l-orange-500',
+    'border-l-blue-500',
+    'border-l-yellow-500',
+    'border-l-green-500',
+  ];
   return colors[index % colors.length];
 };
 
@@ -44,20 +50,24 @@ const getRankIcon = (rank: number) => {
   }
 };
 
-export const TeamCard = ({ team, rank, isTopThree = false }: TeamCardProps) => {
+export const TeamCard = ({
+  team,
+  rank,
+  isTopThree = false,
+  index = 0,
+}: TeamCardProps) => {
   const [isExpanded] = useState(isTopThree);
   const router = useRouter();
 
   const handleViewDetails = () => {
     router.push(`/team-details/${team.code.toLowerCase()}`);
   };
-
-  const borderColor = getBorderColor(parseInt(team.id) - 1);
+  const borderColor = getBorderColor(index);
   const rankColor = getRankColor(rank);
 
   return (
     <Card
-      className={`relative overflow-hidden bg-gradient-card border-l-4 border-l-${borderColor} shadow-card transition-all duration-300 animate-fade-in ${
+      className={`relative overflow-hidden bg-gradient-card border-l-4 ${borderColor} shadow-card transition-all duration-300 animate-fade-in ${
         isTopThree ? 'md:p-8 p-4' : 'p-6'
       }`}
     >
@@ -71,13 +81,17 @@ export const TeamCard = ({ team, rank, isTopThree = false }: TeamCardProps) => {
       {/* Other teams ranking number on top right */}
       {!isTopThree && (
         <div
-          className={`absolute top-4 right-4 ${rankColor} text-black text-xs sm:text-sm border border-gray-600 font-bold w-[30px] h-[30px] flex bg-gray-400 justify-center items-center rounded-full shadow-rank`}
+          className={`absolute top-4 right-4 ${rankColor} text-black text-xs sm:text-sm font-bold w-[30px] h-[30px] flex bg-gray-400 justify-center items-center rounded-full shadow-rank`}
         >
           {rank}
         </div>
       )}
 
-      <div className={`${isTopThree && rank <= 3 ? 'md:ml-10' : ''}`}>
+      <div
+        className={`${
+          isTopThree && rank <= 3 ? 'md:ml-10' : ''
+        } flex flex-col h-full`}
+      >
         <div className='flex items-start justify-between mb-4'>
           <div className='flex-1'>
             <h3
@@ -128,7 +142,7 @@ export const TeamCard = ({ team, rank, isTopThree = false }: TeamCardProps) => {
         )}
 
         {/* Score section */}
-        <div className='flex items-center justify-between mb-4'>
+        <div className='flex items-center justify-between mb-4 flex-grow'>
           <div className='flex items-center space-x-2'>
             <div className='flex items-center space-x-2'>
               <span
@@ -144,8 +158,8 @@ export const TeamCard = ({ team, rank, isTopThree = false }: TeamCardProps) => {
           </div>
         </div>
 
-        {/* View Details Button */}
-        <div className='flex justify-end'>
+        {/* View Details Button - Always at bottom */}
+        <div className='flex justify-end mt-auto'>
           <Button
             variant='default'
             size={isTopThree ? 'default' : 'sm'}
