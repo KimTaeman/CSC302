@@ -42,7 +42,7 @@ export default async function Home() {
                 team={team}
                 rank={index + 1}
                 isTopThree={true}
-                index={teamIndexMap.get(team.id) || 0}
+                index={index}
               />
             ))}
           </div>
