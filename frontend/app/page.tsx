@@ -5,7 +5,7 @@ import { getTeams } from './lib/strapi-server';
 
 export default async function Home() {
   // Fetch teams data on the server side
-  const teams = await getTeams();
+  const { teams, lastUpdate } = await getTeams();
 
   // Sort teams by score (descending), then by team code (ascending) for ties
   const sortedTeams = [...teams].sort((a, b) => {
@@ -29,6 +29,22 @@ export default async function Home() {
         <ScoreboardHeader />
 
         <StatsPanel teams={teams} />
+
+        {lastUpdate && (
+          <p className='text-primary-foreground text-center text-sm mb-8'>
+            Last Updated:{' '}
+            {new Date(lastUpdate).toLocaleString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              hour12: false,
+            })}
+          </p>
+        )}
 
         {/* Top 3 teams - full width */}
         <div className='mb-8'>

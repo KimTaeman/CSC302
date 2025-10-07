@@ -20,6 +20,7 @@ export interface Team {
   topic: string;
   score: number;
   students: Student[];
+  updatedAt?: string;
 }
 
 // Strapi API response types (v5 format)
@@ -38,6 +39,7 @@ interface StrapiTeamResponse {
   topic: string;
   score: number;
   students: StrapiStudentResponse[];
+  updatedAt?: string;
 }
 
 // Convert Strapi student data to our Student interface
@@ -60,11 +62,15 @@ function convertStrapiTeam(strapiTeam: StrapiTeamResponse): Team {
     students: strapiTeam.students
       ? strapiTeam.students.map(convertStrapiStudent)
       : [],
+    updatedAt: strapiTeam.updatedAt,
   };
 }
 
 // Fetch all teams with their students from Strapi using hardcoded URL
-export async function getTeams(): Promise<Team[]> {
+export async function getTeams(): Promise<{
+  teams: Team[];
+  lastUpdate: string | null;
+}> {
   try {
     const url = `${STRAPI_URL}/api/teams?populate[students][fields][0]=name&populate[students][fields][1]=studentId&sort[0]=score%3Adesc&pagination[pageSize]=100`;
 
@@ -93,12 +99,24 @@ export async function getTeams(): Promise<Team[]> {
 
     const data = await response.json();
     console.log('Strapi API response:', JSON.stringify(data, null, 2));
-    return data.data.map(convertStrapiTeam);
+
+    // Extract last update time from meta if available
+    const lastUpdate = data.data.reduce(
+      (max: string | null, team: StrapiTeamResponse) => {
+        return team.updatedAt &&
+          (!max || new Date(team.updatedAt) > new Date(max))
+          ? team.updatedAt
+          : max;
+      },
+      null
+    );
+
+    return { teams: data.data.map(convertStrapiTeam), lastUpdate };
   } catch (error) {
     console.error('Error fetching teams:', error);
     console.log('STRAPI_URL:', STRAPI_URL);
     console.log('Has STRAPI_API_TOKEN:', !!STRAPI_API_TOKEN);
-    return [];
+    return { teams: [], lastUpdate: null };
   }
 }
 
