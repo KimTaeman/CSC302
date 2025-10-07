@@ -18,7 +18,7 @@ const TeamDetailsPage = async ({ params }: TeamDetailsPageProps) => {
   const teams = await getTeams();
 
   // Find team by code (e.g., "csc302-01")
-  const team = teams.find(
+  const team = teams.teams.find(
     (t) => t.code.toLowerCase() === teamCode?.toLowerCase()
   );
 
@@ -27,7 +27,7 @@ const TeamDetailsPage = async ({ params }: TeamDetailsPageProps) => {
   }
 
   const getRankColor = (team: Team) => {
-    const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
+    const sortedTeams = [...teams.teams].sort((a, b) => b.score - a.score);
     const rank = sortedTeams.findIndex((t) => t.id === team.id) + 1;
 
     if (rank === 1) return 'bg-rank-1 text-white';
@@ -37,7 +37,7 @@ const TeamDetailsPage = async ({ params }: TeamDetailsPageProps) => {
   };
 
   const getTeamRank = (team: Team) => {
-    const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
+    const sortedTeams = [...teams.teams].sort((a, b) => b.score - a.score);
     return sortedTeams.findIndex((t) => t.id === team.id) + 1;
   };
 
@@ -172,7 +172,7 @@ const TeamDetailsPage = async ({ params }: TeamDetailsPageProps) => {
             </div>
             <div className='text-center p-4 bg-muted rounded-lg'>
               <p className='text-lg sm:text-xl md:text-2xl font-bold text-primary font-mono'>
-                {teams.length}
+                {teams.teams.length}
               </p>
               <p className='text-xs sm:text-sm text-muted-foreground'>
                 Total Teams
